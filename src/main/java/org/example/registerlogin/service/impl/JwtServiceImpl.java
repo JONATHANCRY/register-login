@@ -8,9 +8,7 @@ import org.example.registerlogin.entity.UserEntity;
 import org.example.registerlogin.service.JwtService;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-
 import javax.crypto.SecretKey;
-import java.security.Key;
 import java.util.Date;
 
 
@@ -20,8 +18,6 @@ public class JwtServiceImpl implements JwtService {
     private static final String SECRET_KEY = "AAAAAAAAAA_BBBBBBBBBB_CCCCCCCCCC_DDDDDDDDDD";
 
     // Tạo key HMAC từ chuỗi SECRET_KEY
-    // SECRET_KEY.getBytes() => convert String thành mảng byte
-    // Keys.hmacShaKeyFor() => convert byte[] thành Key hợp lệ cho HS256
     private SecretKey key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
 
 
