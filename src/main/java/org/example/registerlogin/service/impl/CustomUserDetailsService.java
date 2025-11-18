@@ -1,7 +1,7 @@
 package org.example.registerlogin.service.impl;
 
 import org.example.registerlogin.entity.UserEntity;
-import org.example.registerlogin.repository.Register_Login_Repository;
+import org.example.registerlogin.repository.RegisterLoginRepository;
 import org.example.registerlogin.security.CustomUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
     @Autowired
-    private Register_Login_Repository registerLoginRepository;
+    private RegisterLoginRepository registerLoginRepository;
 
     @Override
     // tìm UserDetails từ email nhập vào

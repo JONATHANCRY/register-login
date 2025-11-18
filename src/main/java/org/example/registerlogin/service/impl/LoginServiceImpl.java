@@ -1,7 +1,7 @@
 package org.example.registerlogin.service.impl;
 
 import org.example.registerlogin.entity.UserEntity;
-import org.example.registerlogin.repository.Register_Login_Repository;
+import org.example.registerlogin.repository.RegisterLoginRepository;
 import org.example.registerlogin.service.LoginService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 @Service
 public class LoginServiceImpl implements LoginService {
-    private final Register_Login_Repository registerLoginRepository;
+    private final RegisterLoginRepository registerLoginRepository;
 
     @Override
     public UserEntity findEmail(String email) {

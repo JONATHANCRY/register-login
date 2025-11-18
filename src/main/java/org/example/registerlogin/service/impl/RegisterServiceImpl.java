@@ -1,7 +1,7 @@
 package org.example.registerlogin.service.impl;
 
 import org.example.registerlogin.entity.UserEntity;
-import org.example.registerlogin.repository.Register_Login_Repository;
+import org.example.registerlogin.repository.RegisterLoginRepository;
 import org.example.registerlogin.service.RegisterService;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -12,7 +12,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class RegisterServiceImpl implements RegisterService {
 
-    private final Register_Login_Repository registerLoginRepository;
+    private final RegisterLoginRepository registerLoginRepository;
 //    private final EmailServiceImpl emailService;
     private PasswordEncoder passwordEncoder;
 
