@@ -41,19 +41,4 @@ public class SecurityConfig {
 
         return http.build();
     }
-//    @Bean
-//    public CorsConfigurationSource corsConfigurationSource() {
-//        CorsConfiguration config = new CorsConfiguration();
-//        config.addAllowedOrigin("http://localhost:5173");
-//        config.addAllowedHeader("*");
-//        config.addAllowedMethod("*");
-//        config.setAllowCredentials(true);
-//        config.setMaxAge(3600L);
-//
-//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-//        source.registerCorsConfiguration("/**", config);
-//        return source;
-//    }
-
-
 }
