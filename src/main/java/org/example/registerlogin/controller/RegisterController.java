@@ -5,7 +5,6 @@ import org.example.registerlogin.entity.UserEntity;
 import org.example.registerlogin.service.JwtService;
 import org.example.registerlogin.service.LoginService;
 import org.example.registerlogin.service.RegisterService;
-import org.example.registerlogin.entity.RequestLoginEntity;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -89,7 +88,7 @@ public String create(@Valid @RequestBody RegisterDTO dto) {
     // @RequestBody chỉ nhận 1 tham số duy nhất
     // dùng post để truyền tham số email , password, trả ra thông tin user
     @PostMapping("/login")
-    public ResponseEntity<?> findEmail(@RequestBody RequestLoginEntity requestLoginEntity){
+    public ResponseEntity<?> findEmail(@RequestBody RegisterDTO requestLoginEntity){
         // tìm user có email
         UserEntity user = loginService.findEmail(requestLoginEntity.getEmail());
         // nếu email, mk tồn tại thì xem verified là true hay false,
