@@ -48,9 +48,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         // Nếu email hợp lệ và user chưa được xác thực
         if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
+            // từ email trả về UserDetail có email, password và role
             UserDetails userDetails = userDetailsService.loadUserByUsername(email);
 
-            // Kiểm tra token hợp lệ
+            // Kiểm tra token hợp lệ, và có còn trong thời gian login
             if (jwtService.isTokenValid(token, userDetails)) {
 
                 UsernamePasswordAuthenticationToken authToken =

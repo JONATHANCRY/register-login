@@ -4,6 +4,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import org.example.registerlogin.dto.RegisterDTO;
 import org.example.registerlogin.entity.UserEntity;
 import org.example.registerlogin.service.JwtService;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -28,14 +29,14 @@ public class JwtServiceImpl implements JwtService {
 
     @Override
     // tạo token từ email
-    public String generateToken(UserEntity user) {
+    public String generateToken(RegisterDTO userDTO) {
 
         // Bắt đầu xây dựng JWT
         return Jwts.builder()
 
                 // setSubject: nội dung chính của JWT (chứa email/username)
                 // FE/BE sẽ đọc subject để biết user nào đang login
-                .setSubject(user.getEmail())
+                .setSubject(userDTO.getEmail())
 
                 // setIssuedAt: thời điểm token được tạo
                 .setIssuedAt(new Date())

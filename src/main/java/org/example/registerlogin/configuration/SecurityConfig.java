@@ -33,7 +33,8 @@ public class SecurityConfig {
 
         http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/register/login").permitAll()
+                        .requestMatchers("/api/register/login",
+                                         "/api/register").permitAll()
                         .anyRequest().authenticated()
                 )
                 // Thêm Filter vào trước UsernamePasswordAuthenticationFilter

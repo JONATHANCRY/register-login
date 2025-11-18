@@ -2,6 +2,7 @@ package org.example.registerlogin.controller;
 
 import org.example.registerlogin.dto.RegisterDTO;
 import org.example.registerlogin.entity.UserEntity;
+import org.example.registerlogin.mapper.UserMapper;
 import org.example.registerlogin.service.JwtService;
 import org.example.registerlogin.service.LoginService;
 import org.example.registerlogin.service.RegisterService;
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping("api/register")
+@RequestMapping("api")
 @CrossOrigin(origins = "*")
 // cho phép front end gọi từ cỗng 5173
 //@CrossOrigin(origins = "http://localhost:5173")
@@ -23,13 +24,14 @@ public class RegisterController {
     public final LoginService loginService;
     private PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
+    private final UserMapper UserMapper;
 
 
     /*                                   ĐĂNG KÝ                              */
 
 // @RequestBody :
 //"Lấy dữ liệu JSON trong body của request, chuyển nó thành một đối tượng Java kiểu RegisterEntity."
-@PostMapping
+@PostMapping("/register")
 public String create(@Valid @RequestBody RegisterDTO dto) {
 
     // kiểm tra email tồn tại
@@ -39,13 +41,9 @@ public String create(@Valid @RequestBody RegisterDTO dto) {
     }
 
     // map DTO -> Entity
-    UserEntity user = new UserEntity();
-    user.setLastName(dto.getLastName());
-    user.setFirstName(dto.getFirstName());
-    user.setAge(dto.getAge());
-    user.setEmail(dto.getEmail());
-    user.setPassword(dto.getPassword()); // dạng RAW → service sẽ encode
+    UserEntity user = UserMapper.toEntity(dto);
 
+    // dạng RAW → service sẽ encode
     registerService.save(user);
 
     return "đăng ký thành công, hãy xác thực email";
@@ -91,16 +89,20 @@ public String create(@Valid @RequestBody RegisterDTO dto) {
     @PostMapping("/login")
     public ResponseEntity<?> findEmail(@RequestBody RequestLoginEntity requestLoginEntity){
         // tìm user có email
-        UserEntity user = loginService.findEmail(requestLoginEntity.getEmail());
+        RegisterDTO user = loginService.findEmail(requestLoginEntity.getEmail());
         // nếu email, mk tồn tại thì xem verified là true hay false,
         if (user != null){
+
             // lấy password trong db
             String hashedPassword = user.getPassword();
+
             // kiểm tra password trong db và password user nhập có giống nhau
             boolean isMatch = passwordEncoder.matches(requestLoginEntity.getPassword(),hashedPassword);
+
             // true thì in ra thông báo đăng nhập thành công
             if (isMatch){
                 if (user.isVerified()){
+
                     // tạo jwt
                     String jwt =jwtService.generateToken(user);
                     // trả ra jwt
