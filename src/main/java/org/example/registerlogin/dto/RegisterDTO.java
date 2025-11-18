@@ -30,5 +30,9 @@ public class RegisterDTO {
             message = "Password phải có ít nhất 8 ký tự, gồm chữ hoa, chữ thường, số và ký tự đặc biệt."
     )
     private String password;
+
+    public boolean isVerified() {
+        return false;
+    }
 }
 
