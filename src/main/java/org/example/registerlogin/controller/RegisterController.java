@@ -1,6 +1,7 @@
 package org.example.registerlogin.controller;
 
 import org.example.registerlogin.dto.RegisterDTO;
+import org.example.registerlogin.dto.RequestLoginDTO;
 import org.example.registerlogin.entity.UserEntity;
 import org.example.registerlogin.service.JwtService;
 import org.example.registerlogin.service.LoginService;
@@ -88,15 +89,15 @@ public String create(@Valid @RequestBody RegisterDTO dto) {
     // @RequestBody chỉ nhận 1 tham số duy nhất
     // dùng post để truyền tham số email , password, trả ra thông tin user
     @PostMapping("/login")
-    public ResponseEntity<?> findEmail(@RequestBody RegisterDTO requestLoginEntity){
+    public ResponseEntity<?> findEmail(@RequestBody RequestLoginDTO requestLoginDTO){
         // tìm user có email
-        UserEntity user = loginService.findEmail(requestLoginEntity.getEmail());
+        UserEntity user = loginService.findEmail(requestLoginDTO.getEmail());
         // nếu email, mk tồn tại thì xem verified là true hay false,
         if (user != null){
             // lấy password trong db
             String hashedPassword = user.getPassword();
             // kiểm tra password trong db và password user nhập có giống nhau
-            boolean isMatch = passwordEncoder.matches(requestLoginEntity.getPassword(),hashedPassword);
+            boolean isMatch = passwordEncoder.matches(requestLoginDTO.getPassword(),hashedPassword);
             // true thì in ra thông báo đăng nhập thành công
             if (isMatch){
                 if (user.isVerified()){
