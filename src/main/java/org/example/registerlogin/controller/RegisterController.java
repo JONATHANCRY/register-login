@@ -42,7 +42,6 @@ public String create(@Valid @RequestBody RegisterDTO dto) {
     // map DTO -> Entity
     UserEntity user = UserMapper.toEntity(dto);
 
-    // dạng RAW → service sẽ encode
     registerService.save(user);
 
     return "đăng ký thành công, hãy xác thực email";
@@ -75,17 +74,13 @@ public String create(@Valid @RequestBody RegisterDTO dto) {
         RegisterDTO user = loginService.findEmail(requestLoginEntity.getEmail());
         // nếu email, mk tồn tại thì xem verified là true hay false,
         if (user != null){
-
             // lấy password trong db
             String hashedPassword = user.getPassword();
-
             // kiểm tra password trong db và password user nhập có giống nhau
             boolean isMatch = passwordEncoder.matches(requestLoginEntity.getPassword(),hashedPassword);
-
             // true thì in ra thông báo đăng nhập thành công
             if (isMatch){
                 if (user.isVerified()){
-
                     // tạo jwt
                     String jwt =jwtService.generateToken(user);
                     // trả ra jwt
@@ -98,6 +93,7 @@ public String create(@Valid @RequestBody RegisterDTO dto) {
         } return ResponseEntity.badRequest().body("chưa đăng ký 1");
 
         // nếu email, pw không tồn tại thì thông báo chưa đăng ký
+
         // nếu email đúng, nhưng pw không đúng, verified false thì
     }
 
