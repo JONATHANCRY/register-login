@@ -1,11 +1,10 @@
-package org.example.registerlogin.entity;
-
+package org.example.registerlogin.dto;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class RequestLoginEntity {
+public class RequestLoginDTO {
     private String email;
     private String password;
 }
