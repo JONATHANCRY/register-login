@@ -40,10 +40,5 @@ public class UserEntity {
     // token xác nhận email
     @Column(name = "verification_token")
     private String verificationToken ;
-
-
 }
-//Entity là một lớp Java ánh xạ (mapping) đến một bảng trong database.
-//Mỗi object của class đó tương ứng một dòng (row) trong bảng.
-//Spring JPA dùng annotation từ jakarta.persistence.* để hiểu và quản lý nó.
 

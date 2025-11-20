@@ -24,7 +24,6 @@ public class RegisterController {
     private PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
 
-
     /*                                   ĐĂNG KÝ                              */
 
 // @RequestBody :
@@ -67,25 +66,9 @@ public String create(@Valid @RequestBody RegisterDTO dto) {
     public String ping() {
         return "Service OK";
     }
-// passwork phải có chữ hoa đầu câu, tối thiều 8 ký tự, phải có ký tự đặc biệt, số, chữ
-// xác thực email
-// khi người dùng đăng ký,
-// email xác nhận sẽ được gởi đến mail đăng ký dùng app password: huxg rexa prnz zgmf
-// người dùng bấm xác nhận email thì db lưu tạm sẽ được lưu vào db gốc
-
-
 
     /*                                     ĐĂNG NHẬP                              */
 
-// đăng nhập = email, mk , đã verified =1
-//  user nhập email, mk
-//  gọi xún db xem có email đó không,
-//    nếu không có thì hiện thông báo 0 đúng
-//    nếu có thì hiện thông báo đăng nhập thành công
-//    @GetMapping("/login")
-//    public RegisterEntity findEmail(@RequestParam String email,String password){
-//        return iLoginService.findEmailAndPassword(email,password);
-//    }
     // @RequestBody chỉ nhận 1 tham số duy nhất
     // dùng post để truyền tham số email , password, trả ra thông tin user
     @PostMapping("/login")
@@ -113,7 +96,6 @@ public String create(@Valid @RequestBody RegisterDTO dto) {
         } return ResponseEntity.badRequest().body("chưa đăng ký 1");
 
         // nếu email, pw không tồn tại thì thông báo chưa đăng ký
-
         // nếu email đúng, nhưng pw không đúng, verified false thì
     }
 
