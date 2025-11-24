@@ -31,8 +31,6 @@ public class RegisterDTO {
     )
     private String password;
 
-    public boolean isVerified() {
-        return false;
-    }
+    private boolean verified;
 }
 

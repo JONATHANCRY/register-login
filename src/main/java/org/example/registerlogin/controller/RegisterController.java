@@ -1,14 +1,15 @@
 package org.example.registerlogin.controller;
 
 import org.example.registerlogin.dto.RegisterDTO;
+import org.example.registerlogin.dto.RequestLoginDTO;
 import org.example.registerlogin.entity.UserEntity;
 import org.example.registerlogin.mapper.UserMapper;
 import org.example.registerlogin.service.JwtService;
 import org.example.registerlogin.service.LoginService;
 import org.example.registerlogin.service.RegisterService;
-import org.example.registerlogin.entity.RequestLoginEntity;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +25,8 @@ public class RegisterController {
     public final LoginService loginService;
     private PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
-    private final UserMapper UserMapper;
+    @Autowired
+    private UserMapper userMapper;
 
     /*                                   ĐĂNG KÝ                              */
 
@@ -40,7 +42,8 @@ public String create(@Valid @RequestBody RegisterDTO dto) {
     }
 
     // map DTO -> Entity
-    UserEntity user = UserMapper.toEntity(dto);
+    UserEntity user = userMapper.toEntity(dto);
+    System.out.println(user.toString());
 
     registerService.save(user);
 
@@ -69,15 +72,15 @@ public String create(@Valid @RequestBody RegisterDTO dto) {
     // @RequestBody chỉ nhận 1 tham số duy nhất
     // dùng post để truyền tham số email , password, trả ra thông tin user
     @PostMapping("/login")
-    public ResponseEntity<?> findEmail(@RequestBody RequestLoginEntity requestLoginEntity){
+    public ResponseEntity<?> findEmail(@RequestBody RequestLoginDTO requestLoginDTO){
         // tìm user có email
-        RegisterDTO user = loginService.findEmail(requestLoginEntity.getEmail());
+        RegisterDTO user = loginService.findEmail(requestLoginDTO.getEmail());
         // nếu email, mk tồn tại thì xem verified là true hay false,
         if (user != null){
             // lấy password trong db
             String hashedPassword = user.getPassword();
             // kiểm tra password trong db và password user nhập có giống nhau
-            boolean isMatch = passwordEncoder.matches(requestLoginEntity.getPassword(),hashedPassword);
+            boolean isMatch = passwordEncoder.matches(requestLoginDTO.getPassword(),hashedPassword);
             // true thì in ra thông báo đăng nhập thành công
             if (isMatch){
                 if (user.isVerified()){

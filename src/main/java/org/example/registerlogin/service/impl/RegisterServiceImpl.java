@@ -18,6 +18,7 @@ public class RegisterServiceImpl implements RegisterService {
 
     @Override
     public UserEntity save(UserEntity user) {
+        System.out.printf(user.getPassword());
         // mã hoá password
         String hashedPassword = passwordEncoder.encode(user.getPassword());
         // truyền password mới vào
@@ -35,11 +36,6 @@ public class RegisterServiceImpl implements RegisterService {
 // kiểm tra email đã tồn tại chưa trả về true, false
     @Override
     public boolean emailExists(String email){
-        // kiểm tra email người dùng nhập vào đã có trong db chưa rồi mới lưu
-        // 1) lấy được giá trị email người dùng nhập x
-        // 2) kiểm tra với dữ kiệu trong db
-        // 3) nếu có rồi thì in ra màng hình lỗi
-        // 4) nếu chưa có thì lưu xún db
         return registerLoginRepository.existsByEmail(email);
     }
 

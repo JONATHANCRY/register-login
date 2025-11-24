@@ -17,6 +17,8 @@ public class LoginServiceImpl implements LoginService {
     @Override
     public RegisterDTO findEmail(String email) {
         UserEntity user = registerLoginRepository.findByEmail(email);
-        return UserMapper.toDTO(user);
+        RegisterDTO registerDTO = UserMapper.toDTO(user);
+        System.out.println(registerDTO);
+        return registerDTO;
     }
 }
