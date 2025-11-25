@@ -1,17 +1,20 @@
 package org.example.registerlogin.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Max;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
-@Getter
-@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
 public class RegisterDTO {
 
+    private Long id;
     @NotBlank(message = "Họ không được để trống")
     private String lastName;
 
@@ -25,6 +28,7 @@ public class RegisterDTO {
     @Email(message = "Email không hợp lệ")
     private String email;
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Pattern(
             regexp = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$",
             message = "Password phải có ít nhất 8 ký tự, gồm chữ hoa, chữ thường, số và ký tự đặc biệt."
@@ -32,5 +36,6 @@ public class RegisterDTO {
     private String password;
 
     private boolean verified;
+    private String verificationToken ;
 }
 

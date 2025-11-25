@@ -1,5 +1,6 @@
 package org.example.registerlogin.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.example.registerlogin.dto.RegisterDTO;
 import org.example.registerlogin.dto.RequestLoginDTO;
 import org.example.registerlogin.entity.UserEntity;
@@ -8,52 +9,49 @@ import org.example.registerlogin.service.JwtService;
 import org.example.registerlogin.service.LoginService;
 import org.example.registerlogin.service.RegisterService;
 import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("api")
 @CrossOrigin(origins = "*")
 // cho phép front end gọi từ cỗng 5173
 //@CrossOrigin(origins = "http://localhost:5173")
 public class RegisterController {
-    public final RegisterService registerService;
-    public final LoginService loginService;
-    private PasswordEncoder passwordEncoder;
+    private final RegisterService registerService;
+    private final LoginService loginService;
+    private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
-    @Autowired
-    private UserMapper userMapper;
+    private final UserMapper userMapper;
 
     /*                                   ĐĂNG KÝ                              */
 
-// @RequestBody :
+    // @RequestBody :
 //"Lấy dữ liệu JSON trong body của request, chuyển nó thành một đối tượng Java kiểu RegisterEntity."
-@PostMapping("/register")
-public String create(@Valid @RequestBody RegisterDTO dto) {
+    @PostMapping("/register")
+    public String create(@Valid @RequestBody RegisterDTO dto) {
 
-    // kiểm tra email tồn tại
-    if (registerService.emailExists(dto.getEmail())) {
-        System.out.println("email đã tồn tại");
-        return "email đã tồn tại";
+        // kiểm tra email tồn tại
+        if (registerService.emailExists(dto.getEmail())) {
+            System.out.println("email đã tồn tại");
+            return "email đã tồn tại";
+        }
+
+        // map DTO -> Entity
+        UserEntity user = userMapper.toEntity(dto);
+        System.out.println(user.toString());
+
+        registerService.save(user);
+
+        return "đăng ký thành công, hãy xác thực email";
     }
-
-    // map DTO -> Entity
-    UserEntity user = userMapper.toEntity(dto);
-    System.out.println(user.toString());
-
-    registerService.save(user);
-
-    return "đăng ký thành công, hãy xác thực email";
-}
 
 
     @GetMapping("/verify")
     // @RequestParam ấy giá trị của tham số "token" trong URL
-    public String verify(@RequestParam String token){
+    public String verify(@RequestParam String token) {
         boolean verified = registerService.verifyAccount(token);
         return verified
                 ? "✅ Xác nhận tài khoản thành công!"
@@ -61,7 +59,7 @@ public String create(@Valid @RequestBody RegisterDTO dto) {
     }
 
 
-// kiểm tra kết nối từ fe đến service
+    // kiểm tra kết nối từ fe đến service
     @GetMapping("/ping")
     public String ping() {
         return "Service OK";
@@ -72,20 +70,20 @@ public String create(@Valid @RequestBody RegisterDTO dto) {
     // @RequestBody chỉ nhận 1 tham số duy nhất
     // dùng post để truyền tham số email , password, trả ra thông tin user
     @PostMapping("/login")
-    public ResponseEntity<?> findEmail(@RequestBody RequestLoginDTO requestLoginDTO){
+    public ResponseEntity<?> findEmail(@RequestBody RequestLoginDTO requestLoginDTO) {
         // tìm user có email
         RegisterDTO user = loginService.findEmail(requestLoginDTO.getEmail());
         // nếu email, mk tồn tại thì xem verified là true hay false,
-        if (user != null){
+        if (user != null) {
             // lấy password trong db
             String hashedPassword = user.getPassword();
             // kiểm tra password trong db và password user nhập có giống nhau
-            boolean isMatch = passwordEncoder.matches(requestLoginDTO.getPassword(),hashedPassword);
+            boolean isMatch = passwordEncoder.matches(requestLoginDTO.getPassword(), hashedPassword);
             // true thì in ra thông báo đăng nhập thành công
-            if (isMatch){
-                if (user.isVerified()){
+            if (isMatch) {
+                if (user.isVerified()) {
                     // tạo jwt
-                    String jwt =jwtService.generateToken(user);
+                    String jwt = jwtService.generateToken(user);
                     // trả ra jwt
                     return ResponseEntity.ok(jwt);
                 } else {
@@ -93,7 +91,8 @@ public String create(@Valid @RequestBody RegisterDTO dto) {
                     return ResponseEntity.badRequest().body("chưa xt email");
                 }
             }
-        } return ResponseEntity.badRequest().body("chưa đăng ký 1");
+        }
+        return ResponseEntity.badRequest().body("chưa đăng ký 1");
 
         // nếu email, pw không tồn tại thì thông báo chưa đăng ký
 
